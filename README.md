@@ -3,9 +3,12 @@
 Peta sebaran 22 kantor Samsat (UPTD Pendapatan Daerah) di 22 kabupaten/kota NTT,
 lengkap dengan pejabat UPTD. Ditulis dengan Rust **tanpa dependensi** (hanya `std`).
 
-## Menjalankan
+## Dokumentasi
 
-Panduan lengkap untuk pemula: [docs/MENJALANKAN-RUST.md](docs/MENJALANKAN-RUST.md).
+- [docs/DOKUMENTASI.md](docs/DOKUMENTASI.md): dokumentasi lengkap (fitur, arsitektur, API, data, deploy, pemeliharaan).
+- [docs/MENJALANKAN-RUST.md](docs/MENJALANKAN-RUST.md): panduan Rust untuk pemula.
+
+## Menjalankan
 
 ```bash
 cargo run --release
@@ -13,7 +16,7 @@ cargo run --release
 
 Buka http://127.0.0.1:8080. Ganti port/host: `PORT=3000 HOST=0.0.0.0 cargo run --release`.
 
-Hasil build: satu file `target/release/sebaran-samsat-ntt` (~330 KB) yang sudah
+Hasil build: satu file `target/release/sebaran-samsat-ntt` (~350 KB) yang sudah
 berisi HTML dan data — tinggal salin ke server dan jalankan.
 
 ## Struktur

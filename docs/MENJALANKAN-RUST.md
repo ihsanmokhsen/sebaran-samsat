@@ -134,7 +134,7 @@ Hasil `cargo build --release` adalah **satu file** yang sudah berisi HTML dan da
 ./target/release/sebaran-samsat-ntt
 ```
 
-File ini (~330 KB) bisa disalin ke server lain dengan OS yang sama dan langsung dijalankan,
+File ini (~350 KB) bisa disalin ke server lain dengan OS yang sama dan langsung dijalankan,
 tanpa perlu memasang Rust di sana.
 
 ### Untuk server Linux

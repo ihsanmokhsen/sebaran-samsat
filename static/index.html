@@ -35,20 +35,12 @@
   .icon-btn:hover { background: rgba(255, 255, 255, .9); }
   .icon-btn.teks { font-size: 12px; font-weight: 700; }
   .icon-btn.on { background: var(--navy); color: #fff; }
-  .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .brand { flex: 1; display: flex; align-items: center; gap: 10px; min-width: 0; }
   .brand img { width: 36px; height: 38px; object-fit: contain; }
   .brand h1 { margin: 0; font-size: 17px; color: var(--navy); white-space: nowrap; letter-spacing: -.01em; }
   .brand p { margin: 0; font-size: 11px; color: var(--muted); white-space: nowrap; }
   .brand em { font-size: 10px; color: var(--muted); }
 
-  .ticker { flex: 1; min-width: 0; display: flex; align-items: stretch; height: 40px; border-radius: 12px; overflow: hidden; background: var(--kaca-isi); }
-  .ticker .label { background: var(--navy); color: #fff; padding: 4px 12px; display: flex; flex-direction: column; justify-content: center; flex: none; border-radius: 12px; }
-  .ticker .label small { font-size: 9px; opacity: .75; }
-  .ticker .label b { font-size: 12px; display: flex; align-items: center; gap: 6px; }
-  .ticker .label b::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #40c057; }
-  .stats { display: flex; align-items: center; gap: 22px; padding: 0 16px; overflow-x: auto; white-space: nowrap; font-size: 12px; scrollbar-width: none; }
-  .stats span::before { content: "●"; color: var(--green); margin-right: 6px; font-size: 9px; vertical-align: 1px; }
-  .stats b { color: var(--navy); }
 
   /* ---------- Peta memenuhi layar, panel melayang di atasnya ---------- */
   .main { position: fixed; inset: 0; }
@@ -146,10 +138,10 @@
   }
 
   /* ---------- Layar kecil ---------- */
-  @media (max-width: 1000px) { .ticker { display: none; } .brand p, .brand em { display: none; } header { gap: 8px; } header .brand { flex: 1; } }
   @media (max-width: 760px) {
     :root { --atas: 76px; }
-    header { top: 8px; left: 8px; right: 8px; height: 56px; }
+    header { top: 8px; left: 8px; right: 8px; height: 56px; gap: 8px; }
+    .brand p, .brand em { display: none; }
     aside { left: 8px; bottom: 8px; width: calc(100% - 16px); max-width: 340px; }
     .resmi { display: none; }
     .legend { min-width: 0; left: 8px; bottom: 50px; }
@@ -168,10 +160,6 @@
       <p>Sistem Informasi Sebaran Kantor Samsat Provinsi NTT</p>
       <em>“Data Samsat Akurat, Pelayanan Lebih Dekat.”</em>
     </div>
-  </div>
-  <div class="ticker">
-    <div class="label"><small>UPTD Pendapatan Daerah</small><b>Data Samsat NTT 2026</b></div>
-    <div class="stats" id="stats"></div>
   </div>
   <button class="icon-btn teks" id="tiga-d" title="Tampilan 3D" aria-label="Aktifkan tampilan 3D">3D</button>
   <button class="icon-btn" id="reset" title="Tampilkan semua" aria-label="Tampilkan semua titik">↻</button>
@@ -261,10 +249,13 @@ function setTigaD(aktif) {
   tigaD = aktif;
   document.body.classList.toggle("tiga-d", aktif);
   $("tiga-d").classList.toggle("on", aktif);
-  map.setTerrain(aktif ? { source: "relief", exaggeration: 1.5 } : null);
+  map.stop();
+  if (aktif) map.setTerrain({ source: "relief", exaggeration: 1.5 });
   map.setLayoutProperty("bayangan", "visibility", aktif ? "visible" : "none");
   map.setLayoutProperty("gedung-3d", "visibility", aktif ? "visible" : "none");
   map.easeTo({ pitch: aktif ? 60 : 0, bearing: aktif ? map.getBearing() : 0, duration: 900 });
+  // Relief baru dilepas setelah animasi selesai; melepasnya di tengah animasi membuat MapLibre error
+  if (!aktif) map.once("moveend", () => { if (!tigaD) map.setTerrain(null); });
 }
 
 let putarId = null;
@@ -369,14 +360,6 @@ async function init() {
     `<button data-p="${p}">${p ? `<i style="background:${WARNA[p]}"></i>${p}` : "Semua"}</button>`).join("");
 
   const jumlah = (f) => data.filter(f).length;
-  $("stats").innerHTML = [
-    ["Kantor Samsat", data.length],
-    ["Kabupaten/Kota", new Set(data.map(d => d.kabkota)).size],
-    ["Pulau", pulauList.length],
-    ["Pejabat UPTD", data.flatMap(d => d.pejabat).filter(([n]) => n !== "-").length],
-    ["Punya Foto", jumlah(d => d.foto)],
-    ["Punya Sosmed", jumlah(d => d.sosmed)],
-  ].map(([k, v]) => `<span>${k} <b>${v}</b></span>`).join("");
 
   $("legend").innerHTML = `
     <h3>Titik Samsat per Pulau <button aria-label="Ciutkan">−</button></h3>
