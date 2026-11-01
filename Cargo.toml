@@ -1,0 +1,15 @@
+[package]
+name = "sebaran-samsat-ntt"
+version = "0.1.0"
+edition = "2021"
+
+# Tidak ada dependensi: cukup pustaka standar Rust (std).
+[dependencies]
+
+# Profil rilis dibuat sekecil mungkin.
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

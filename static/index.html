@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sebaran Samsat NTT</title>
+<link rel="icon" href="/foto/logo-bpad.png">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+<style>
+  :root {
+    --navy: #0f2a4a; --text: #1d2733; --muted: #4f5b69; --green: #2f9e44;
+    /* Gaya kaca (glassmorphism) ala Apple, dipakai semua panel */
+    --kaca-bg: rgba(255, 255, 255, .74);
+    --kaca-blur: blur(30px) saturate(180%);
+    --kaca-garis: 1px solid rgba(255, 255, 255, .65);
+    --kaca-bayang: 0 10px 40px rgba(15, 42, 74, .22), inset 0 1px 0 rgba(255, 255, 255, .7);
+    --kaca-isi: rgba(118, 118, 128, .14);   /* latar elemen di dalam kaca (input, badge) */
+    --atas: 84px;                            /* jarak di bawah header melayang */
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; }
+  body { font: 14px/1.45 -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "Segoe UI", Roboto, sans-serif; color: var(--text); background: #0b1f33; }
+  button { font: inherit; cursor: pointer; }
+
+  .kaca, header, aside, .card, .maplibregl-ctrl-group, .maplibregl-popup-content {
+    background: var(--kaca-bg);
+    -webkit-backdrop-filter: var(--kaca-blur); backdrop-filter: var(--kaca-blur);
+    border: var(--kaca-garis); box-shadow: var(--kaca-bayang);
+  }
+
+  /* ---------- Header (melayang) ---------- */
+  header { position: absolute; top: 12px; left: 12px; right: 12px; height: 60px; z-index: 1100;
+    display: flex; align-items: center; gap: 12px; padding: 0 12px; border-radius: 18px; }
+  .icon-btn { width: 36px; height: 36px; flex: none; border-radius: 50%; border: 0; background: var(--kaca-isi); display: grid; place-items: center; font-size: 16px; color: var(--navy); transition: background .15s; }
+  .icon-btn:hover { background: rgba(255, 255, 255, .9); }
+  .icon-btn.teks { font-size: 12px; font-weight: 700; }
+  .icon-btn.on { background: var(--navy); color: #fff; }
+  .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .brand img { width: 36px; height: 38px; object-fit: contain; }
+  .brand h1 { margin: 0; font-size: 17px; color: var(--navy); white-space: nowrap; letter-spacing: -.01em; }
+  .brand p { margin: 0; font-size: 11px; color: var(--muted); white-space: nowrap; }
+  .brand em { font-size: 10px; color: var(--muted); }
+
+  .ticker { flex: 1; min-width: 0; display: flex; align-items: stretch; height: 40px; border-radius: 12px; overflow: hidden; background: var(--kaca-isi); }
+  .ticker .label { background: var(--navy); color: #fff; padding: 4px 12px; display: flex; flex-direction: column; justify-content: center; flex: none; border-radius: 12px; }
+  .ticker .label small { font-size: 9px; opacity: .75; }
+  .ticker .label b { font-size: 12px; display: flex; align-items: center; gap: 6px; }
+  .ticker .label b::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #40c057; }
+  .stats { display: flex; align-items: center; gap: 22px; padding: 0 16px; overflow-x: auto; white-space: nowrap; font-size: 12px; scrollbar-width: none; }
+  .stats span::before { content: "●"; color: var(--green); margin-right: 6px; font-size: 9px; vertical-align: 1px; }
+  .stats b { color: var(--navy); }
+
+  /* ---------- Peta memenuhi layar, panel melayang di atasnya ---------- */
+  .main { position: fixed; inset: 0; }
+  .peta, #map { position: absolute; inset: 0; }
+
+  /* ---------- Sidebar ---------- */
+  aside { position: absolute; top: var(--atas); left: 12px; bottom: 12px; width: 320px; z-index: 1050;
+    display: flex; flex-direction: column; min-height: 0; overflow: hidden; border-radius: 18px;
+    transition: transform .3s cubic-bezier(.2, .8, .2, 1), opacity .3s; }
+  body.tutup aside { transform: translateX(calc(-100% - 24px)); opacity: 0; pointer-events: none; }
+  .side-head { padding: 16px 16px 12px; border-bottom: 1px solid rgba(15, 42, 74, .08); }
+  .side-head h2 { margin: 0 0 8px; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  input[type=search] { width: 100%; padding: 9px 12px; border: 0; border-radius: 10px; font: inherit; outline: none; background: var(--kaca-isi); }
+  input[type=search]:focus { background: rgba(255, 255, 255, .85); box-shadow: 0 0 0 3px rgba(15, 42, 74, .15); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .chips button { border: 1px solid rgba(255, 255, 255, .7); background: rgba(255, 255, 255, .55); border-radius: 999px; padding: 3px 10px; font-size: 12px; color: var(--muted); }
+  .chips button.on { border-color: var(--navy); color: #fff; background: var(--navy); }
+  .chips i, .legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
+
+  #list { flex: 1; overflow-y: auto; padding: 6px; }
+  .item { padding: 8px 10px; cursor: pointer; border-radius: 12px; display: flex; gap: 10px; align-items: center; transition: background .15s; }
+  .item:hover { background: rgba(255, 255, 255, .55); }
+  .item.active { background: rgba(255, 255, 255, .9); box-shadow: 0 2px 10px rgba(15, 42, 74, .12); }
+  .item .thumb { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; flex: none; background: var(--kaca-isi); }
+  .item .dot { width: 44px; height: 44px; border-radius: 10px; flex: none; display: grid; place-items: center; background: var(--kaca-isi); }
+  .item .dot i { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px #0002; }
+  .item b { font-weight: 600; display: block; }
+  .item small { color: var(--muted); font-size: 12px; }
+  .tag { font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); display: block; }
+  .empty { padding: 12px 16px; color: var(--muted); }
+
+  /* ---------- Panel melayang di atas peta ---------- */
+  .card { position: absolute; z-index: 5; border-radius: 16px; }
+  .legend { left: 12px; bottom: 30px; transition: left .3s; padding: 12px 14px; font-size: 13px; min-width: 210px; }
+  .legend h3 { margin: 0; font-size: 11px; letter-spacing: .05em; text-transform: uppercase; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .legend h3 button { border: 0; background: none; color: var(--muted); padding: 0 2px; }
+  .legend ul { list-style: none; margin: 8px 0 0; padding: 0; }
+  .legend li { display: flex; align-items: center; padding: 3px 0; }
+  .legend li span { margin-left: auto; background: var(--kaca-isi); border-radius: 6px; padding: 0 7px; font-size: 11px; font-weight: 600; }
+  .legend.kecil ul { display: none; }
+
+  .maplibregl-ctrl-top-left { top: calc(var(--atas) - 10px); left: 2px; transition: left .3s; }
+  .maplibregl-ctrl-group { border-radius: 12px !important; overflow: hidden; }
+  .maplibregl-ctrl-group button { background-color: transparent !important; }
+  .maplibregl-ctrl-group button + button { border-top: 1px solid rgba(15, 42, 74, .08) !important; }
+  @media (min-width: 761px) {
+    body:not(.tutup) .legend { left: 344px; }
+    body:not(.tutup) .maplibregl-ctrl-top-left { left: 334px; }
+  }
+
+  .resmi { right: 12px; top: var(--atas); display: flex; align-items: center; gap: 10px; padding: 8px 12px; max-width: 290px; }
+  .resmi img { width: 34px; height: 36px; object-fit: contain; background: #fff; border-radius: 9px; padding: 2px; }
+  .resmi .badge { display: inline-block; background: #fcc419; color: #3d2f00; font-size: 10px; font-weight: 700; border-radius: 999px; padding: 1px 8px; }
+  .resmi small { display: block; font-size: 10px; margin-top: 2px; color: var(--muted); }
+
+  .basemap { right: 12px; bottom: 30px; display: flex; padding: 4px; gap: 4px; border-radius: 12px; }
+  .basemap button { border: 0; background: none; border-radius: 8px; padding: 5px 12px; font-size: 12px; color: var(--muted); }
+  .basemap button.on { background: var(--navy); color: #fff; }
+
+  .petunjuk { left: 50%; top: var(--atas); transform: translateX(-50%); padding: 6px 8px 6px 14px; font-size: 12px; color: var(--muted); display: none; align-items: center; gap: 8px; white-space: nowrap; border-radius: 999px; }
+  .petunjuk button { border: 0; background: var(--kaca-isi); border-radius: 999px; padding: 3px 10px; font-size: 12px; color: var(--navy); }
+  body.tiga-d .petunjuk { display: flex; }
+
+  .maplibregl-ctrl-attrib { background: rgba(255, 255, 255, .6) !important; -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border-radius: 8px 0 0 0; }
+
+  /* ---------- Penanda & popup ---------- */
+  .titik { position: relative; width: 16px; height: 16px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 1px 4px #0006; cursor: pointer; transition: transform .15s; }
+  .titik.pusat { width: 20px; height: 20px; border-width: 3px; box-shadow: 0 0 0 2px var(--navy), 0 1px 6px #0008; }
+  .titik.aktif { transform: scale(1.5); }
+  /* Nama Samsat di samping titik, hanya muncul saat peta diperbesar (kelas .dekat) */
+  .titik .nama { position: absolute; left: calc(100% + 6px); top: 50%; transform: translateY(-50%); white-space: nowrap;
+    font-size: 12px; font-weight: 600; color: var(--navy); padding: 2px 8px; border-radius: 999px;
+    background: var(--kaca-bg); -webkit-backdrop-filter: var(--kaca-blur); backdrop-filter: var(--kaca-blur);
+    border: var(--kaca-garis); box-shadow: 0 2px 8px rgba(15, 42, 74, .25); pointer-events: none; display: none; }
+  .dekat .titik .nama { display: block; }
+  .titik.aktif .nama { transform: translateY(-50%) scale(.67); transform-origin: left center; }
+
+  .maplibregl-popup-content { border-radius: 16px; padding: 14px 16px; max-width: 300px; }
+  .maplibregl-popup-tip { opacity: .75; }
+  .maplibregl-popup-close-button { font-size: 18px; padding: 2px 8px; border-radius: 0 16px 0 10px; }
+  .p .foto { display: block; width: 100%; height: 150px; object-fit: cover; border-radius: 10px; margin-bottom: 10px; background: var(--kaca-isi); }
+  .p h3 { margin: 0; font-size: 15px; color: var(--navy); }
+  .p .addr { color: var(--muted); font-size: 12px; margin: 2px 0 10px; }
+  .p dl { margin: 0; font-size: 12px; }
+  .p dt { color: var(--muted); margin-top: 6px; }
+  .p dd { margin: 0; }
+  .p .links { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .p .links a { font-size: 12px; text-decoration: none; padding: 5px 12px; border-radius: 999px; background: var(--navy); color: #fff !important; }
+  .p .links a.sos { background: rgba(255, 255, 255, .7); color: var(--navy) !important; border: 1px solid rgba(15, 42, 74, .12); }
+  .p .note { color: #b35c00; font-size: 11px; margin-top: 8px; }
+
+  /* Browser tanpa dukungan blur: pakai latar lebih pekat agar tetap terbaca */
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    :root { --kaca-bg: rgba(255, 255, 255, .94); }
+  }
+
+  /* ---------- Layar kecil ---------- */
+  @media (max-width: 1000px) { .ticker { display: none; } .brand p, .brand em { display: none; } header { gap: 8px; } header .brand { flex: 1; } }
+  @media (max-width: 760px) {
+    :root { --atas: 76px; }
+    header { top: 8px; left: 8px; right: 8px; height: 56px; }
+    aside { left: 8px; bottom: 8px; width: calc(100% - 16px); max-width: 340px; }
+    .resmi { display: none; }
+    .legend { min-width: 0; left: 8px; bottom: 50px; }
+    .basemap { right: 8px; bottom: 50px; }
+    .petunjuk span { display: none; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <button class="icon-btn" id="menu" title="Daftar Samsat" aria-label="Buka/tutup daftar Samsat">☰</button>
+  <div class="brand">
+    <img src="/foto/logo-bpad.png" alt="Logo BPAD NTT">
+    <div>
+      <h1>Sebaran Samsat NTT</h1>
+      <p>Sistem Informasi Sebaran Kantor Samsat Provinsi NTT</p>
+      <em>“Data Samsat Akurat, Pelayanan Lebih Dekat.”</em>
+    </div>
+  </div>
+  <div class="ticker">
+    <div class="label"><small>UPTD Pendapatan Daerah</small><b>Data Samsat NTT 2026</b></div>
+    <div class="stats" id="stats"></div>
+  </div>
+  <button class="icon-btn teks" id="tiga-d" title="Tampilan 3D" aria-label="Aktifkan tampilan 3D">3D</button>
+  <button class="icon-btn" id="reset" title="Tampilkan semua" aria-label="Tampilkan semua titik">↻</button>
+</header>
+
+<div class="main">
+  <aside>
+    <div class="side-head">
+      <h2>Daftar Kantor</h2>
+      <input id="q" type="search" placeholder="Cari samsat, kabupaten, atau pejabat">
+      <div class="chips" id="chips"></div>
+    </div>
+    <div id="list"></div>
+  </aside>
+  <div class="peta">
+    <div id="map"></div>
+    <div class="card petunjuk"><span>Klik kanan + geser untuk memiringkan &amp; memutar</span>
+      <button id="putar">⟳ Putar</button><button id="tegak">Tegak</button></div>
+    <div class="card resmi"><img src="/foto/logo-bpad.png" alt="">
+      <div><span class="badge">● DATA RESMI BPAD NTT</span><small>Sumber: bapenda.nttprov.go.id · Google Maps</small></div></div>
+    <div class="card legend" id="legend"></div>
+    <div class="card basemap" id="basemap"><button data-b="satelit" class="on">Satelit</button><button data-b="standar">Standar</button></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script>
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const $ = id => document.getElementById(id);
+const kecil = () => matchMedia("(max-width: 760px)").matches;
+const sidebarTerbuka = () => !kecil() && !document.body.classList.contains("tutup");
+
+// Warna titik per pulau
+const WARNA = { Timor: "#d9480f", Flores: "#1971c2", Sumba: "#2f9e44", Alor: "#ae3ec9",
+                Lembata: "#0c8599", Rote: "#e8590c", Sabu: "#c2255c" };
+const WARNA_PUSAT = "#f59f00";
+const ZOOM_NAMA = 10;   // mulai zoom ini nama Samsat ditampilkan
+const NAMA_SOSMED ={ instagram: "Instagram", facebook: "Facebook", tiktok: "TikTok" };
+
+// Sidebar terbuka di layar lebar, tertutup di HP
+if (kecil()) document.body.classList.add("tutup");
+
+// ---------- Peta (MapLibre GL: mendukung 2D & 3D) ----------
+// Semua sumber gratis tanpa API key:
+//  - Satelit: Esri World Imagery      - Standar: OpenStreetMap
+//  - Relief:  AWS Terrain Tiles       - Gedung 3D: OpenFreeMap
+const map = new maplibregl.Map({
+  container: "map",
+  center: [122.2, -9.3], zoom: 6.3, maxPitch: 75,
+  attributionControl: false,
+  style: {
+    version: 8,
+    sources: {
+      satelit: { type: "raster", tileSize: 256, maxzoom: 19, attribution: "Citra © Esri",
+        tiles: ["https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"] },
+      standar: { type: "raster", tileSize: 256, maxzoom: 19,
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"] },
+      relief: { type: "raster-dem", encoding: "terrarium", tileSize: 256, maxzoom: 13,
+        tiles: ["https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"] },
+      gedung: { type: "vector", url: "https://tiles.openfreemap.org/planet",
+        attribution: '<a href="https://openfreemap.org">OpenFreeMap</a>' },
+    },
+    layers: [
+      { id: "satelit", type: "raster", source: "satelit" },
+      { id: "standar", type: "raster", source: "standar", layout: { visibility: "none" } },
+      { id: "bayangan", type: "hillshade", source: "relief", layout: { visibility: "none" },
+        paint: { "hillshade-exaggeration": .35, "hillshade-shadow-color": "#2b2b2b" } },
+      { id: "gedung-3d", type: "fill-extrusion", source: "gedung", "source-layer": "building", minzoom: 14,
+        layout: { visibility: "none" },
+        paint: {
+          "fill-extrusion-color": "#e9e4da",
+          "fill-extrusion-height": ["coalesce", ["get", "render_height"], 6],
+          "fill-extrusion-base": ["coalesce", ["get", "render_min_height"], 0],
+          "fill-extrusion-opacity": .85,
+        } },
+    ],
+  },
+});
+map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), "top-left");
+map.addControl(new maplibregl.AttributionControl({ compact: false, customAttribution:
+  'Badan Pendapatan dan Aset Daerah Provinsi NTT | <a href="https://ihsanmokhsen.com" target="_blank" rel="noopener">IT-BPAD</a>' }), "bottom-right");
+
+// ---------- Mode 3D ----------
+let tigaD = false;
+function setTigaD(aktif) {
+  tigaD = aktif;
+  document.body.classList.toggle("tiga-d", aktif);
+  $("tiga-d").classList.toggle("on", aktif);
+  map.setTerrain(aktif ? { source: "relief", exaggeration: 1.5 } : null);
+  map.setLayoutProperty("bayangan", "visibility", aktif ? "visible" : "none");
+  map.setLayoutProperty("gedung-3d", "visibility", aktif ? "visible" : "none");
+  map.easeTo({ pitch: aktif ? 60 : 0, bearing: aktif ? map.getBearing() : 0, duration: 900 });
+}
+
+let putarId = null;
+function putar() {
+  if (putarId) { cancelAnimationFrame(putarId); putarId = null; $("putar").textContent = "⟳ Putar"; return; }
+  $("putar").textContent = "■ Berhenti";
+  const langkah = () => { map.setBearing(map.getBearing() + .15); putarId = requestAnimationFrame(langkah); };
+  langkah();
+}
+
+// ---------- Data & penanda ----------
+let data = [], markers = {}, pulau = "", pusat = null, pusatMarker = null;
+const cocok = (d, q) => !q || [d.nama, d.kabkota, d.alamat, ...d.pejabat.flat()].join(" ").toLowerCase().includes(q);
+
+function popupHtml(d) {
+  const rows = d.pejabat.map(([n, j]) => `<dt>${esc(j)}</dt><dd>${n === "-" ? "—" : esc(n)}</dd>`).join("");
+  // Sosmed & foto bersifat opsional: hanya tampil jika ada di data
+  const sosmed = (d.sosmed || []).map(([p, url]) =>
+    `<a class="sos" href="${esc(url)}" target="_blank" rel="noopener">${NAMA_SOSMED[p] || esc(p)} ↗</a>`).join("");
+  return `<div class="p">
+    ${d.foto ? `<img class="foto" src="${esc(d.foto)}" alt="${esc(d.nama)}" loading="lazy">` : ""}
+    <h3>${esc(d.nama)}</h3>
+    <div class="addr">${esc(d.alamat)}</div>
+    <dl>${rows}</dl>
+    <div class="links">
+      <a href="${esc(d.maps)}" target="_blank" rel="noopener">Google Maps ↗</a>
+      <a href="https://www.google.com/maps/dir/?api=1&destination=${d.lat},${d.lng}" target="_blank" rel="noopener">Rute ↗</a>
+      ${sosmed}
+    </div>
+    ${d.catatan ? `<div class="note">${esc(d.catatan)}</div>` : ""}
+  </div>`;
+}
+
+function buatMarker(d, id, kelas, warna) {
+  // Elemen luar dipakai MapLibre untuk posisi (lewat CSS transform), jadi
+  // efek visual (membesar, animasi) hanya boleh di elemen dalam (.titik).
+  const el = document.createElement("div");
+  el.title = d.nama;
+  el.innerHTML = `<div class="titik ${kelas}" style="background:${warna}"><span class="nama">${esc(d.nama)}</span></div>`;
+  el.addEventListener("click", () => tandai(id));
+  return new maplibregl.Marker({ element: el })
+    .setLngLat([d.lng, d.lat])
+    .setPopup(new maplibregl.Popup({ offset: 14, maxWidth: "300px" }).setHTML(popupHtml(d)));
+}
+
+function itemHtml(d, id, warna, ket) {
+  const gambar = d.foto ? `<img class="thumb" src="${esc(d.foto)}" alt="" loading="lazy">`
+                        : `<span class="dot"><i style="background:${warna}"></i></span>`;
+  return `<div class="item" data-id="${id}">${gambar}<div>${ket}<b>${esc(d.nama)}</b><small>${esc(d.kabkota)}</small></div></div>`;
+}
+
+function render(fit = true) {
+  const q = $("q").value.toLowerCase().trim();
+  const tampil = data.filter(d => (!pulau || d.pulau === pulau) && cocok(d, q));
+  // Kantor pusat tampil di filter "Semua" dan "Timor" (letaknya di Kupang)
+  const adaPusat = (!pulau || pulau === "Timor") && cocok(pusat, q);
+
+  $("list").innerHTML = (adaPusat ? itemHtml(pusat, "pusat", WARNA_PUSAT,`<span class="tag">Kantor Pusat</span>`) : "") +
+    tampil.map(d => itemHtml(d, d.id, WARNA[d.pulau], "")).join("")
+    || `<div class="empty">Tidak ditemukan.</div>`;
+  document.querySelectorAll("#chips button").forEach(b => b.classList.toggle("on", b.dataset.p === pulau));
+
+  adaPusat ? pusatMarker.addTo(map) : pusatMarker.remove();
+  const ids = new Set(tampil.map(d => d.id));
+  for (const d of data) ids.has(d.id) ? markers[d.id].addTo(map) : markers[d.id].remove();
+  map.resize();
+  if (fit && tampil.length) {
+    const b = new maplibregl.LngLatBounds();
+    tampil.forEach(d => b.extend([d.lng, d.lat]));
+    map.fitBounds(b, { padding: { top: 60, bottom: 60, right: 60, left: sidebarTerbuka() ? 380 : 60 }, maxZoom: 13, pitch: tigaD ? 60 : 0, duration: 800 });
+  }
+}
+
+function tandai(id) {
+  document.querySelectorAll(".item").forEach(e => e.classList.toggle("active", e.dataset.id == id));
+  for (const k in markers) markers[k].getElement().firstChild.classList.toggle("aktif", k == id);
+  pusatMarker.getElement().firstChild.classList.toggle("aktif", id === "pusat");
+}
+
+function pilih(id) {
+  const d = id === "pusat" ? pusat : data.find(x => x.id == id);
+  const m = id === "pusat" ? pusatMarker : markers[id];
+  if (kecil()) document.body.classList.add("tutup");
+  map.resize();
+  document.querySelectorAll(".maplibregl-popup").forEach(p => p.remove());
+  map.flyTo({ center: [d.lng, d.lat], zoom: tigaD ? 17 : 16, pitch: tigaD ? 60 : 0, duration: 1200,
+    padding: { left: sidebarTerbuka() ? 340 : 0, top: 0, right: 0, bottom: 0 } });
+  map.once("moveend", () => { if (!m.getPopup().isOpen()) m.togglePopup(); });
+  tandai(id);
+}
+
+async function init() {
+  const [samsat, kantorPusat] = await Promise.all([fetch("/api/samsat").then(r => r.json()), fetch("/api/kantor-pusat").then(r => r.json())]);
+  data = samsat;
+  pusat = kantorPusat;
+
+  for (const d of data) markers[d.id] = buatMarker(d, d.id, "", WARNA[d.pulau]);
+  pusatMarker = buatMarker(pusat, "pusat", "pusat", WARNA_PUSAT);
+
+  const pulauList = [...new Set(data.map(d => d.pulau))];
+  $("chips").innerHTML = ["", ...pulauList].map(p =>
+    `<button data-p="${p}">${p ? `<i style="background:${WARNA[p]}"></i>${p}` : "Semua"}</button>`).join("");
+
+  const jumlah = (f) => data.filter(f).length;
+  $("stats").innerHTML = [
+    ["Kantor Samsat", data.length],
+    ["Kabupaten/Kota", new Set(data.map(d => d.kabkota)).size],
+    ["Pulau", pulauList.length],
+    ["Pejabat UPTD", data.flatMap(d => d.pejabat).filter(([n]) => n !== "-").length],
+    ["Punya Foto", jumlah(d => d.foto)],
+    ["Punya Sosmed", jumlah(d => d.sosmed)],
+  ].map(([k, v]) => `<span>${k} <b>${v}</b></span>`).join("");
+
+  $("legend").innerHTML = `
+    <h3>Titik Samsat per Pulau <button aria-label="Ciutkan">−</button></h3>
+    <ul>
+      ${pulauList.map(p => `<li><i style="background:${WARNA[p]}"></i>${p}<span>${jumlah(d => d.pulau === p)}</span></li>`).join("")}
+      <li><i style="background:${WARNA_PUSAT};box-shadow:0 0 0 1.5px var(--navy)"></i>Kantor Pusat BPAD<span>1</span></li>
+    </ul>`;
+  const tombolLegenda = $("legend").querySelector("button");
+  const ciutkan = (ya) => { $("legend").classList.toggle("kecil", ya); tombolLegenda.textContent = ya ? "+" : "−"; };
+  if (kecil()) ciutkan(true);
+  tombolLegenda.onclick = () => ciutkan(!$("legend").classList.contains("kecil"));
+
+  $("basemap").addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    document.querySelectorAll("#basemap button").forEach(x => x.classList.toggle("on", x === b));
+    map.setLayoutProperty("satelit", "visibility", b.dataset.b === "satelit" ? "visible" : "none");
+    map.setLayoutProperty("standar", "visibility", b.dataset.b === "standar" ? "visible" : "none");
+  });
+  $("chips").addEventListener("click", e => { const b = e.target.closest("button"); if (b) { pulau = b.dataset.p; render(); } });
+  $("list").addEventListener("click", e => { const it = e.target.closest(".item"); if (it) pilih(it.dataset.id); });
+  $("q").addEventListener("input", () => render());
+  $("menu").onclick = () => { document.body.classList.toggle("tutup"); setTimeout(() => map.resize(), 220); };
+  $("reset").onclick = () => { $("q").value = ""; pulau = ""; render(); };
+  $("tiga-d").onclick = () => setTigaD(!tigaD);
+  $("putar").onclick = putar;
+  $("tegak").onclick = () => map.easeTo({ bearing: 0, pitch: tigaD ? 60 : 0 });
+  render();
+}
+map.on("load", init);
+const cekNama = () => $("map").classList.toggle("dekat", map.getZoom() >= ZOOM_NAMA);
+map.on("zoom", cekNama);
+cekNama();
+</script>
+</body>
+</html>

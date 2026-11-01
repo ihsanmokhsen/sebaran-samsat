@@ -1,0 +1,286 @@
+[
+  {
+    "id": 1, "nama": "Samsat Kota Kupang", "kabkota": "Kota Kupang", "pulau": "Timor",
+    "foto": "/foto/samsat-01.jpg",
+    "alamat": "Jl. Polisi Militer, Oebobo, Kec. Oebobo, Kota Kupang",
+    "lat": -10.173062, "lng": 123.608516,
+    "maps": "https://maps.app.goo.gl/oACjZh5G9V6Q5CZr9",
+    "sosmed": [["instagram", "https://www.instagram.com/samsat_kotakupang/"]],
+    "pejabat": [
+      ["Remmy Christian Pah, S.STP, M.Si", "Kepala UPTD"],
+      ["-", "Kepala Tata Usaha"],
+      ["Skolastika G. Maing, S.Sos, M.H.I", "Kasie Penetapan & Penagihan"],
+      ["Jonny Alfreth Do'o, S.Sos, MM", "Kasie Verifikasi"]
+    ]
+  },
+  {
+    "id": 2, "nama": "Samsat Kabupaten Kupang", "kabkota": "Kab. Kupang", "pulau": "Timor",
+    "foto": "/foto/samsat-02.jpg",
+    "alamat": "Jl. Nasional Trans-Timor, Babau, Kec. Kupang Timur, Kab. Kupang",
+    "lat": -10.105287, "lng": 123.787297,
+    "maps": "https://maps.app.goo.gl/LN65hNH5U37AyRYD9",
+    "sosmed": [["instagram", "https://www.instagram.com/samsat_kabupatenkupang/"]],
+    "pejabat": [
+      ["Abdulgani R. Tokan, SE", "Kepala UPTD"],
+      ["Christian Hortono Mamulak, SH", "Kepala Tata Usaha"],
+      ["Samuel Ndun, SE", "Kasie Penetapan & Penagihan"],
+      ["Mage Raymond Uly, S.Sos", "Kasie Verifikasi"]
+    ]
+  },
+  {
+    "id": 3, "nama": "Samsat Soe", "kabkota": "Kab. Timor Tengah Selatan", "pulau": "Timor",
+    "foto": "/foto/samsat-03.jpg",
+    "alamat": "Karang Siri, Kec. Kota Soe, Kab. Timor Tengah Selatan",
+    "lat": -9.8533844, "lng": 124.277331,
+    "maps": "https://maps.app.goo.gl/uKMKiNMKZRFp7K3p7",
+    "pejabat": [
+      ["Fredik Leky, S.IP, M.Si", "Kepala UPTD"],
+      ["Petrus Naldino Nias, S.STP, MM", "Kepala Tata Usaha"],
+      ["Belandina Y. M. Nalle, SH", "Kasie Penetapan & Penagihan"],
+      ["Yuliana Maria Babys, S.Kom", "Kasie Verifikasi"]
+    ]
+  },
+  {
+    "id": 4, "nama": "Samsat Kefamenanu", "kabkota": "Kab. Timor Tengah Utara", "pulau": "Timor",
+    "foto": "/foto/samsat-04.jpg",
+    "alamat": "Jl. Maubeli, Kec. Kota Kefamenanu, Kab. Timor Tengah Utara",
+    "lat": -9.492138, "lng": 124.494828,
+    "maps": "https://maps.app.goo.gl/cRYxebCGM4jwwmKZ6",
+    "pejabat": [
+      ["Alberd E. Pairikas, SE, M.Si", "Kepala UPTD"],
+      ["Bernadetha Salem, SH", "Kepala Tata Usaha"],
+      ["Putu P. A. Sujana, S.Si.T", "Kasie Penetapan & Penagihan"],
+      ["Yohanes Jago, S.Sos", "Kasie Verifikasi"]
+    ]
+  },
+  {
+    "id": 5, "nama": "Samsat Atambua", "kabkota": "Kab. Belu", "pulau": "Timor",
+    "foto": "/foto/samsat-05.jpg",
+    "alamat": "Jl. Tulamalae, Kec. Atambua Barat, Kab. Belu",
+    "lat": -9.095862, "lng": 124.886297,
+    "maps": "https://maps.app.goo.gl/vWKAVn157pkkFxCs8",
+    "sosmed": [["instagram", "https://www.instagram.com/samsatbelu/"]],
+    "pejabat": [
+      ["Stanis Laus Moat, S.STP, M.Si", "Kepala UPTD"],
+      ["Crispim Pereira Leo Soro, S.STP, M.M", "Kepala Tata Usaha"],
+      ["Zaitun Harun, S.Kom", "Kasie Penetapan & Penagihan"],
+      ["Margaritha Kolo Tadoe, SP", "Kasie Verifikasi"]
+    ]
+  },
+  {
+    "id": 6, "nama": "Samsat Betun", "kabkota": "Kab. Malaka", "pulau": "Timor",
+    "foto": "/foto/samsat-06.jpg",
+    "alamat": "Wehali, Kec. Malaka Tengah, Kab. Malaka",
+    "lat": -9.5754983, "lng": 124.8952104,
+    "maps": "https://www.google.com/maps/place/Kantor+Samsat+Sementara+Malaka+Tengah/@-9.5754983,124.8952104,17z",
+    "catatan": "Titik dari pencarian Google Maps (situs Bapenda belum mencantumkan tautan peta).",
+    "pejabat": [
+      ["Clara Maria F. Bano, SE", "Kepala UPTD"],
+      ["Chrisantus Reynaldi Diding, S.STP", "Kepala Tata Usaha"],
+      ["Philipus Lip Tatut, S.Fil", "Kasie Penetapan & Penagihan"],
+      ["Francisco M. Cipriano, SH", "Kasie Verifikasi"]
+    ]
+  },
+  {
+    "id": 7, "nama": "Samsat Rote Ndao", "kabkota": "Kab. Rote Ndao", "pulau": "Rote",
+    "foto": "/foto/samsat-07.jpg",
+    "alamat": "Mokdale, Kec. Lobalain, Kab. Rote Ndao",
+    "lat": -10.755937, "lng": 123.060422,
+    "maps": "https://maps.app.goo.gl/2wAh3NnCKkVtWX6F6",
+    "pejabat": [
+      ["Petrus A. Manehat, S.Sos", "Kepala UPTD"],
+      ["Apris Imanuel Suan, S.Sos", "Kepala Tata Usaha"],
+      ["Ganna Dedo Ngara, S.Sos", "Kasie Penetapan & Penagihan"],
+      ["Yohanis Talan, S.IP", "Kasie Verifikasi"]
+    ]
+  },
+  {
+    "id": 8, "nama": "Samsat Sabu Raijua", "kabkota": "Kab. Sabu Raijua", "pulau": "Sabu",
+    "foto": "/foto/samsat-08.jpg",
+    "alamat": "Roboaba, Kec. Sabu Barat, Kab. Sabu Raijua",
+    "lat": -10.477162, "lng": 121.858672,
+    "maps": "https://maps.app.goo.gl/sV1uqFHcosmmCHqT7",
+    "pejabat": [
+      ["Marcurius Heraclitus Bani Haba, SH", "Kepala UPTD"],
+      ["Ferdy Alfonsus Pajikana, SE", "Kepala Tata Usaha"],
+      ["Johanis Bunga, ST", "Kasie Penetapan & Penagihan"],
+      ["Dance Hawula, SH", "Kasie Verifikasi"]
+    ]
+  },
+  {
+    "id": 9, "nama": "Samsat Kalabahi", "kabkota": "Kab. Alor", "pulau": "Alor",
+    "foto": "/foto/samsat-09.jpg",
+    "alamat": "Kalabahi Kota, Kec. Teluk Mutiara, Kab. Alor",
+    "lat": -8.2159356, "lng": 124.5186547,
+    "maps": "https://maps.app.goo.gl/S4Si9ve5UypHNjqQ8",
+    "pejabat": [
+      ["Cornelis Daniel Adoe, S.Sos", "Kepala UPTD"],
+      ["Dewi Setiawati Moka, S.STP", "Kepala Tata Usaha"],
+      ["Ramlah H. Nahrawi, SE, MM", "Kasie Penetapan & Penagihan"],
+      ["Herlina K. Peringsy, SE", "Kasie Verifikasi"]
+    ]
+  },
+  {
+    "id": 10, "nama": "Samsat Lewoleba", "kabkota": "Kab. Lembata", "pulau": "Lembata",
+    "alamat": "Lewoleba Timur, Kec. Nubatukan, Kab. Lembata",
+    "lat": -8.3606261, "lng": 123.4604531,
+    "maps": "https://share.google/OeReHV7Q2Mb7KKtVB",
+    "pejabat": [
+      ["Oskar Ola Samon, S.Sos", "Kepala UPTD"],
+      ["Clementinus Berino, S.Ag", "Kepala Tata Usaha"],
+      ["Mahyudin Rais, SE", "Kasie Penetapan & Penagihan"],
+      ["Paulina Pantaleon, S.Pt", "Kasie Verifikasi"]
+    ]
+  },
+  {
+    "id": 11, "nama": "Samsat Larantuka", "kabkota": "Kab. Flores Timur", "pulau": "Flores",
+    "foto": "/foto/samsat-11.jpg",
+    "alamat": "Puken Tobi Wangi Bao, Kec. Larantuka, Kab. Flores Timur",
+    "lat": -8.327512, "lng": 123.000578,
+    "maps": "https://maps.app.goo.gl/7rPXppSuoU1amp179",
+    "sosmed": [["facebook", "https://www.facebook.com/UPTWilayahKabupatenFloresTimur/"]],
+    "pejabat": [
+      ["Yohanes Boro Hali, SE", "Kepala UPTD"],
+      ["Yeremias Padja, S.Sos", "Kepala Tata Usaha"],
+      ["Fransiskus X. Seli Tokan, SE", "Kasie Penetapan & Penagihan"],
+      ["Juniati Maria Maumabe, S.STP", "Kasie Verifikasi"]
+    ]
+  },
+  {
+    "id": 12, "nama": "Samsat Maumere", "kabkota": "Kab. Sikka", "pulau": "Flores",
+    "foto": "/foto/samsat-12.jpg",
+    "alamat": "Jl. El Tari, Kel. Kota Uneng, Kec. Alok, Kab. Sikka",
+    "lat": -8.6193109, "lng": 122.2074535,
+    "maps": "https://maps.app.goo.gl/Sdc71TEbtAM9MRh69",
+    "pejabat": [
+      ["Maria Wilfrida Basilika, SE", "Kepala UPTD"],
+      ["Andreas Dolu, S.ST", "Kepala Tata Usaha"],
+      ["Bibiana Bertarika Finolince, S.Kom", "Kasie Penetapan & Penagihan"],
+      ["Josephine Natalia Seran, SE", "Kasie Verifikasi"]
+    ]
+  },
+  {
+    "id": 13, "nama": "Samsat Ende", "kabkota": "Kab. Ende", "pulau": "Flores",
+    "foto": "/foto/samsat-13.jpg",
+    "alamat": "Jl. Melati, Kel. Paupire, Kec. Ende Tengah, Kab. Ende",
+    "lat": -8.8364661, "lng": 121.6629063,
+    "maps": "https://maps.app.goo.gl/N5uc82K3hVtphogW9",
+    "pejabat": [
+      ["Alponsus Yuli, SE", "Kepala UPTD"],
+      ["Vinsensius Ferdinand Sare, S.Fil", "Kepala Tata Usaha"],
+      ["Emanuel Laga, S.Hut", "Kasie Penetapan & Penagihan"],
+      ["Leonemsius Sedu, S.Pi", "Kasie Verifikasi"]
+    ]
+  },
+  {
+    "id": 14, "nama": "Samsat Mbay", "kabkota": "Kab. Nagekeo", "pulau": "Flores",
+    "foto": "/foto/samsat-14.jpg",
+    "alamat": "Danga, Kec. Aesesa, Kab. Nagekeo",
+    "lat": -8.561813, "lng": 121.267859,
+    "maps": "https://maps.app.goo.gl/fYRjxB3JUWTSK6D97",
+    "pejabat": [
+      ["Yoseph Marianus Yegho, SE", "Kepala UPTD"],
+      ["Arnoldus Gradus Wudalina, S.STP", "Kepala Tata Usaha"],
+      ["Yasintha K. Kowe Toa, S.Hut", "Kasie Penetapan & Penagihan"],
+      ["Yohanes Paulus Mite, SP", "Kasie Verifikasi"]
+    ]
+  },
+  {
+    "id": 15, "nama": "Samsat Bajawa", "kabkota": "Kab. Ngada", "pulau": "Flores",
+    "alamat": "Kisanata, Bajawa, Kab. Ngada",
+    "lat": -8.789962, "lng": 120.970453,
+    "maps": "https://maps.app.goo.gl/UgBvvR7VbGuVaoaW7",
+    "pejabat": [
+      ["Anna Maria Belang, SP", "Kepala UPTD"],
+      ["Yovita Harsiani Almi, SE", "Kepala Tata Usaha"],
+      ["Maria Goreti Meo, SE", "Kasie Penetapan & Penagihan"],
+      ["-", "Kasie Verifikasi"]
+    ]
+  },
+  {
+    "id": 16, "nama": "Samsat Borong", "kabkota": "Kab. Manggarai Timur", "pulau": "Flores",
+    "foto": "/foto/samsat-16.jpg",
+    "alamat": "Jl. Jend. Piere Tandean, Rana Loba, Kec. Borong, Kab. Manggarai Timur",
+    "lat": -8.815637, "lng": 120.604828,
+    "maps": "https://maps.app.goo.gl/byuXczYaUiLRng3w7",
+    "pejabat": [
+      ["Stanislaus K. Jawan, S.Sos, M.AP", "Kepala UPTD"],
+      ["Mariana Ch. P. W. Kellen, SE", "Kepala Tata Usaha"],
+      ["Fransiskus Siap, S.IP", "Kasie Penetapan & Penagihan"],
+      ["-", "Kasie Verifikasi"]
+    ]
+  },
+  {
+    "id": 17, "nama": "Samsat Ruteng", "kabkota": "Kab. Manggarai", "pulau": "Flores",
+    "alamat": "Tenda, Kec. Langke Rembong, Kab. Manggarai",
+    "lat": -8.609988, "lng": 120.476047,
+    "maps": "https://maps.app.goo.gl/2erhdDZYqJPQ1YB98",
+    "pejabat": [
+      ["Lorensius Agung, SP", "Kepala UPTD"],
+      ["Sebastianus Nggudari Jama", "Kepala Tata Usaha"],
+      ["Maria Rosa Mstyca Snak, SE", "Kasie Penetapan & Penagihan"],
+      ["Anita Primadewi Gael, SE", "Kasie Verifikasi"]
+    ]
+  },
+  {
+    "id": 18, "nama": "Samsat Labuan Bajo", "kabkota": "Kab. Manggarai Barat", "pulau": "Flores",
+    "alamat": "Jl. Frans Nala, Batu Cermin, Kec. Komodo, Kab. Manggarai Barat",
+    "lat": -8.4750919, "lng": 119.8906523,
+    "maps": "https://maps.app.goo.gl/niNYTJEFHQE2ukr2A",
+    "pejabat": [
+      ["Martianus T.A. Pranda, S.Sos, M.Si", "Kepala UPTD"],
+      ["Benediktus Gempur, SE", "Kepala Tata Usaha"],
+      ["Frederikus E. Daeng, S.STP", "Kasie Penetapan & Penagihan"],
+      ["Sanusi, SE", "Kasie Verifikasi"]
+    ]
+  },
+  {
+    "id": 19, "nama": "Samsat Waingapu", "kabkota": "Kab. Sumba Timur", "pulau": "Sumba",
+    "foto": "/foto/samsat-19.jpg",
+    "alamat": "Matawai, Kec. Kota Waingapu, Kab. Sumba Timur",
+    "lat": -9.650762, "lng": 120.261672,
+    "maps": "https://maps.app.goo.gl/NMV5Yqi1aMYBaTix7",
+    "pejabat": [
+      ["Denny Semuel Sandy, SH", "Kepala UPTD"],
+      ["Dorince Ina Bili, S.Pd", "Kepala Tata Usaha"],
+      ["Elisabeth Kahi Oy, SH", "Kasie Penetapan & Penagihan"],
+      ["Rosalin A. Radjah Gah, A.Md", "Kasie Verifikasi"]
+    ]
+  },
+  {
+    "id": 20, "nama": "Samsat Waibakul", "kabkota": "Kab. Sumba Tengah", "pulau": "Sumba",
+    "alamat": "Anakalang, Kec. Katikutana, Kab. Sumba Tengah",
+    "lat": -9.589762, "lng": 119.568547,
+    "maps": "https://maps.app.goo.gl/49ReZwEZAdPmbuWZ6",
+    "pejabat": [
+      ["Yohanis Umbu Sakayu, S.Sos", "Kepala UPTD"],
+      ["Kristianus Roni Tobu, ST", "Kepala Tata Usaha"],
+      ["Agus Umbu Tauwa, SH", "Kasie Penetapan & Penagihan"],
+      ["Antonius Wilhelmus Leu, SE", "Kasie Verifikasi"]
+    ]
+  },
+  {
+    "id": 21, "nama": "Samsat Waikabubak", "kabkota": "Kab. Sumba Barat", "pulau": "Sumba",
+    "alamat": "Wee Karou, Kec. Loli, Kab. Sumba Barat",
+    "lat": -9.638988, "lng": 119.384016,
+    "maps": "https://maps.app.goo.gl/VG3oDKAH7YZnDQxRA",
+    "pejabat": [
+      ["Kristoforus Jogo Ja, SH", "Kepala UPTD"],
+      ["Christina Lodong, SH", "Kepala Tata Usaha"],
+      ["Maria L.E. Betris Noemay, A.Md", "Kasie Penetapan & Penagihan"],
+      ["Yosef Tamu Bapa Dolo, S.STP", "Kasie Verifikasi"]
+    ]
+  },
+  {
+    "id": 22, "nama": "Samsat Tambolaka", "kabkota": "Kab. Sumba Barat Daya", "pulau": "Sumba",
+    "alamat": "Kadi Pada, Kec. Kota Tambolaka, Kab. Sumba Barat Daya",
+    "lat": -9.412762, "lng": 119.199078,
+    "maps": "https://maps.app.goo.gl/RUAuFZWSzqLa8tDm6",
+    "pejabat": [
+      ["Ermelinda P.R. Bita, S.IP, M.Si", "Kepala UPTD"],
+      ["Hermanus Mete, S.Hut", "Kepala Tata Usaha"],
+      ["Pegiar Efedi J. Mulik, S.Sos", "Kasie Penetapan & Penagihan"],
+      ["Josefus B. Patnono, S.Sos", "Kasie Verifikasi"]
+    ]
+  }
+]

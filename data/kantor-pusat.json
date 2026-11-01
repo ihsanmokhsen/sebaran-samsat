@@ -1,0 +1,21 @@
+{
+  "nama": "Kantor Pusat BPAD NTT",
+  "kabkota": "Kota Kupang",
+  "alamat": "Sayap kiri Gedung Sasando (Kantor Gubernur NTT), Jl. El Tari No.52, Oebobo, Kota Kupang",
+  "lat": -10.1713145, "lng": 123.6080804,
+  "maps": "https://www.google.com/maps/place/Badan+Pendapatan+dan+Aset+Daerah+(BAPENDA)+Provinsi+NTT/@-10.1713145,123.6080804,19z/data=!4m6!3m5!1s0x2c569d17589ce8f9:0x25fc6996242ae793!8m2!3d-10.1713145!4d123.6080804",
+  "foto": "/foto/kantor-pusat.jpg",
+  "sosmed": [
+    ["instagram", "https://www.instagram.com/bpad_ntt/"],
+    ["tiktok", "https://www.tiktok.com/@bpadntt"],
+    ["facebook", "https://www.facebook.com/profile.php?id=61594953399188"]
+  ],
+  "pejabat": [
+    ["Johny Ericson Ataupah, S.P., M.M.", "Kepala BPAD Provinsi NTT"],
+    ["Drs. Yoseph Florianus Napal, MM", "Sekretaris"],
+    ["Oktavianus Mare, S.S", "Kabid Pendapatan I"],
+    ["Lusia Fransisca Tiwe, ST", "Kabid Pendapatan II"],
+    ["Sany Heldria Tetmilay, SE, Ak, M.Acc", "Kabid Analisa Kebutuhan dan Penatausahaan Aset"],
+    ["Drs. Dominikus D. Payong, MA", "Kabid Pemanfaatan, Pemindahtanganan dan Pengamanan Aset"]
+  ]
+}
