@@ -99,6 +99,7 @@
   .basemap { right: 12px; bottom: 30px; display: flex; padding: 4px; gap: 4px; border-radius: 12px; }
   .basemap button { border: 0; background: none; border-radius: 8px; padding: 5px 12px; font-size: 12px; color: var(--muted); }
   .basemap button.on { background: var(--navy); color: #fff; }
+  .basemap .pisah { width: 1px; margin: 3px 2px; background: rgba(15, 42, 74, .15); }
 
   .petunjuk { left: 50%; top: var(--atas); transform: translateX(-50%); padding: 6px 8px 6px 14px; font-size: 12px; color: var(--muted); display: none; align-items: center; gap: 8px; white-space: nowrap; border-radius: 999px; }
   .petunjuk button { border: 0; background: var(--kaca-isi); border-radius: 999px; padding: 3px 10px; font-size: 12px; color: var(--navy); }
@@ -181,7 +182,7 @@
     <div class="card resmi"><img src="/foto/logo-bpad.png" alt="">
       <div><span class="badge">● DATA RESMI BPAD NTT</span><small>Sumber: bapenda.nttprov.go.id · Google Maps</small></div></div>
     <div class="card legend" id="legend"></div>
-    <div class="card basemap" id="basemap"><button data-b="satelit" class="on">Satelit</button><button data-b="standar">Standar</button></div>
+    <div class="card basemap" id="basemap"><button data-b="satelit" class="on">Satelit</button><button data-b="standar">Standar</button><span class="pisah"></span><button id="batas" class="on" title="Tampilkan garis batas kabupaten/kota">Batas Wilayah</button></div>
   </div>
 </div>
 
@@ -289,6 +290,18 @@ function popupHtml(d) {
   </div>`;
 }
 
+// Garis batas kab/kota, digambar di bawah titik Samsat
+function pasangBatas(batas) {
+  map.addSource("batas", { type: "geojson", data: batas });
+  map.addLayer({ id: "batas-garis", type: "line", source: "batas",
+    paint: { "line-color": "#fff", "line-width": 1.2, "line-opacity": .85 } });
+}
+
+function setBatas(aktif) {
+  $("batas").classList.toggle("on", aktif);
+  if (map.getLayer("batas-garis")) map.setLayoutProperty("batas-garis", "visibility", aktif ? "visible" : "none");
+}
+
 function buatMarker(d, id, kelas, warna) {
   // Elemen luar dipakai MapLibre untuk posisi (lewat CSS transform), jadi
   // efek visual (membesar, animasi) hanya boleh di elemen dalam (.titik).
@@ -352,6 +365,10 @@ async function init() {
   data = samsat;
   pusat = kantorPusat;
 
+  // Batas wilayah bersifat tambahan: jika gagal dimuat, peta Samsat tetap berjalan
+  try { pasangBatas(await fetch("/api/batas-kabupaten").then(r => r.json())); }
+  catch (err) { console.warn("Batas wilayah tidak dapat dimuat:", err); $("batas").hidden = true; }
+
   for (const d of data) markers[d.id] = buatMarker(d, d.id, "", WARNA[d.pulau]);
   pusatMarker = buatMarker(pusat, "pusat", "pusat", WARNA_PUSAT);
 
@@ -374,7 +391,8 @@ async function init() {
 
   $("basemap").addEventListener("click", e => {
     const b = e.target.closest("button"); if (!b) return;
-    document.querySelectorAll("#basemap button").forEach(x => x.classList.toggle("on", x === b));
+    if (b.id === "batas") return setBatas(!b.classList.contains("on"));
+    document.querySelectorAll("#basemap button[data-b]").forEach(x => x.classList.toggle("on", x === b));
     map.setLayoutProperty("satelit", "visibility", b.dataset.b === "satelit" ? "visible" : "none");
     map.setLayoutProperty("standar", "visibility", b.dataset.b === "standar" ? "visible" : "none");
   });

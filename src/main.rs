@@ -14,6 +14,8 @@ use std::thread;
 const INDEX_HTML: &str = include_str!("../static/index.html");
 const SAMSAT_JSON: &str = include_str!("../data/samsat.json");
 const KANTOR_PUSAT_JSON: &str = include_str!("../data/kantor-pusat.json");
+// Batas wilayah 22 kab/kota NTT (data tetap, tidak perlu diperbarui)
+const BATAS_KABUPATEN_JSON: &str = include_str!("../data/batas-kabupaten.geojson");
 
 /// Satu respons HTTP sederhana: kode status, tipe konten, dan isi (dalam byte,
 /// supaya bisa berisi teks maupun gambar).
@@ -76,6 +78,11 @@ fn route(method: &str, path: &str) -> Response {
             status: "200 OK",
             content_type: "application/json; charset=utf-8",
             body: KANTOR_PUSAT_JSON.into(),
+        },
+        ("GET", "/api/batas-kabupaten") => Response {
+            status: "200 OK",
+            content_type: "application/geo+json; charset=utf-8",
+            body: BATAS_KABUPATEN_JSON.into(),
         },
         ("GET", "/health") => Response {
             status: "200 OK",
